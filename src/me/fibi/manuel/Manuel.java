@@ -1,35 +1,40 @@
+package me.fibi.manuel;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DiscordCharacters {
+public class Manuel {
 
     /**
      * generates a map of english characters with discord emoji values
      */
     private Map<Character, String> getAlphabetMap() {
         var ENGLISH_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
-        var alphaebetMap = ENGLISH_CHARACTERS
+        var alphabetMap = ENGLISH_CHARACTERS
                 .chars() // IntStream
                 .mapToObj(c -> (char) c) // Intstream -> Stream<Character>
                 .collect(Collectors.toMap(c -> c, c -> ":regional_indicator_" + c + ":")); // characters to map
-        return alphaebetMap;
+        return alphabetMap;
     }
 
     /**
      * adds spacing, punctuation marks to the map
      *
-     * @return map of english Charactersm punctuation marks with discord emoji values
+     * @return map of english Characters punctuation marks with discord emoji values
      */
     private Map<Character, String> getCharMap() {
         try {
             var charMap = getAlphabetMap();
-            var emojiMap = Files.lines(Paths.get("res/emoji.txt"))
+            //  var emojiMap = Files.lines(Path.of(Manuel.class.getClassLoader().getResource("emoji.txt").getPath())).collect(Collectors.toMap(s -> s.split(",")[0].toCharArray()[0], s -> ":" + s.split(",")[1].strip() + ":"));
+            // Files.lines won't work for jar, gotta use BufferedReader
+            var emojiMap = new BufferedReader(new InputStreamReader(Manuel.class.getClassLoader().getResource("emoji.txt").openStream()))
+                    .lines()
                     .collect(Collectors.toMap(s -> s.split(",")[0].toCharArray()[0], s -> ":" + s.split(",")[1].strip() + ":"));
             charMap.putAll(emojiMap); // merge the two maps
-            charMap.put(' ', "\t");
+            charMap.put(' ', "\t"); // add space encoding
             return charMap;
         } catch (IOException e) {
             e.printStackTrace();
