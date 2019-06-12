@@ -1,5 +1,5 @@
 ## Manuel
-me.fibi.manuel.Manuel is a lightweight library that encodes English alphabet to discord alphabet emojis.
+Manuel is a lightweight library that encodes English alphabet to discord alphabet emojis.
 It uses streams to map the characters to emojis. 
 
 #### Example of usage
